@@ -74,16 +74,9 @@ app.use((err, req, res, next) => {
   });
 
 const PORT = 3000;
-async function startServer() {
-  // Rest of your server startup code
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-}
 
-startServer().catch(error => {
-  console.error('Failed to start server:', error);
-  process.exit(1);
-});
 
 module.exports = app;
