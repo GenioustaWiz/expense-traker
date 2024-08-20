@@ -1,13 +1,9 @@
 # Use Node.js v14
-FROM node:20
+FROM node:22
 
 # Create app directory
 # this is the docker directory folder
 WORKDIR /app
-# Bundle app source
-# this copy all files and folders on the root folder to the docker folder
-COPY . .
-# ====END OF ROOT SETTINGs ====
 
 # Usernode exists to protect the previous from being accessed by people with root previlages
 # USER node
@@ -16,6 +12,10 @@ COPY . .
 COPY package*.json ./
 
 RUN npm install
+
+# Bundle app source
+# this copy all files and folders on the root folder to the docker folder
+COPY . .
 
 #the app.js should be your main index js file
 CMD [ "node", "app.js" ]  
