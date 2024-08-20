@@ -2,10 +2,9 @@ npm init -y
 
 npm install express express-validator dotenv bcryptjs helmet nodemon express-rate-limit cookie-parser ejs jsonwebtoken express-session
 
-npm install --save mysql2
-npm install sequelize  
+# npm install --save mysql2
+npm install sequelize mysql2
 #Install the CLI Globally
-npm install @sequelize/mysql
 npm install -g sequelize-cli
 
 # FOR testing database
