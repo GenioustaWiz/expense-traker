@@ -32,11 +32,6 @@ router.route('/signup')
         console.log('User already exists:', email);
         return res.status(409).json({ message: 'User already exists' });
       }
-
-      // // Hash the password
-      // const hashedPassword = await bcrypt.hash(password, 10);
-      // console.log('Hashed password:', hashedPassword);
-
       // Create a new user
       const newUser = await User.create({
         username,
@@ -45,19 +40,9 @@ router.route('/signup')
       });
 
       console.log('Created new user:', newUser);
-
-      // Generate a token
-      const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRATION 
-      });
-
-      console.log('Generated token:', token);
-
-      // Send the token as a cookie
-      res.cookie('token', token, { httpOnly: true });
-
       // Redirect after successful user registration
-      res.redirect('/');
+      // Redirect after session is destroyed
+      res.redirect('/api/user/login');
       
     } catch (error) {
       console.error('Error in signup route:', error);

@@ -73,7 +73,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong!');
   });
 
-const PORT = 3000;
+const PORT = 5000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
