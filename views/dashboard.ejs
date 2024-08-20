@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .section {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Budget Dashboard</h1>
+    <div class="dashboard">
+        <div class="section">
+            <h2>Budgets</h2>
+            <table id="budgets-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <h3>Add/Edit Budget</h3>
+            <form id="budget-form">
+                <input type="hidden" id="budget-id">
+                <div class="form-group">
+                    <label for="budget-category">Category:</label>
+                    <select id="budget-category"></select>
+                </div>
+                <div class="form-group">
+                    <label for="budget-amount">Amount:</label>
+                    <input type="number" id="budget-amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="budget-start-date">Start Date:</label>
+                    <input type="date" id="budget-start-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="budget-end-date">End Date:</label>
+                    <input type="date" id="budget-end-date" required>
+                </div>
+                <button type="submit">Save Budget</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Categories</h2>
+            <table id="categories-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <h3>Add/Edit Category</h3>
+            <form id="category-form">
+                <input type="hidden" id="category-id">
+                <div class="form-group">
+                    <label for="category-name">Name:</label>
+                    <input type="text" id="category-name" required>
+                </div>
+                <button type="submit">Save Category</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Expenses</h2>
+            <table id="expenses-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <h3>Add/Edit Expense</h3>
+            <form id="expense-form">
+                <input type="hidden" id="expense-id">
+                <div class="form-group">
+                    <label for="expense-category">Category:</label>
+                    <select id="expense-category"></select>
+                </div>
+                <div class="form-group">
+                    <label for="expense-amount">Amount:</label>
+                    <input type="number" id="expense-amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-date">Date:</label>
+                    <input type="date" id="expense-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-description">Description:</label>
+                    <input type="text" id="expense-description">
+                </div>
+                <button type="submit">Save Expense</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Payment Methods</h2>
+            <table id="payment-methods-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <h3>Add/Edit Payment Method</h3>
+            <form id="payment-method-form">
+                <input type="hidden" id="payment-method-id">
+                <div class="form-group">
+                    <label for="payment-method-name">Name:</label>
+                    <input type="text" id="payment-method-name" required>
+                </div>
+                <button type="submit">Save Payment Method</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Expense Analytics</h2>
+            <canvas id="expense-chart"></canvas>
+        </div>
+    </div>
+    <div class="section">
+        <h2>User Account</h2>
+        <button id="delete-account">Delete Account</button>
+    </div>
+    <script>
+        // Fetch and display data
+        async function fetchData(endpoint, tableId, rowTemplate) {
+            try {
+                const response = await axios.get(`/api/${endpoint}`);
+                const data = response.data;
+                const tbody = document.querySelector(`#${tableId} tbody`);
+                tbody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = rowTemplate(item);
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error(`Error fetching ${endpoint}:`, error);
+            }
+        }
+
+        // Budgets
+        fetchData('budgets', 'budgets-table', (budget) => `
+            <td>${budget.category_name}</td>
+            <td>$${budget.amount}</td>
+            <td>${new Date(budget.start_date).toLocaleDateString()}</td>
+            <td>${new Date(budget.end_date).toLocaleDateString()}</td>
+            <td>
+                <button onclick="editBudget(${budget.budget_id})">Edit</button>
+                <button onclick="deleteBudget(${budget.budget_id})">Delete</button>
+            </td>
+        `);
+
+        // Categories
+        fetchData('categories', 'categories-table', (category) => `
+            <td>${category.category_name}</td>
+            <td>
+                <button onclick="editCategory(${category.category_id})">Edit</button>
+                <button onclick="deleteCategory(${category.category_id})">Delete</button>
+            </td>
+        `);
+
+        // Expenses
+        fetchData('expenses', 'expenses-table', (expense) => `
+            <td>${expense.category_name}</td>
+            <td>$${expense.amount}</td>
+            <td>${new Date(expense.date).toLocaleDateString()}</td>
+            <td>${expense.description}</td>
+            <td>
+                <button onclick="editExpense(${expense.expense_id})">Edit</button>
+                <button onclick="deleteExpense(${expense.expense_id})">Delete</button>
+            </td>
+        `);
+
+        // Payment Methods
+        fetchData('payment-methods', 'payment-methods-table', (method) => `
+            <td>${method.payment_method_name}</td>
+            <td>
+                <button onclick="editPaymentMethod(${method.payment_method_id})">Edit</button>
+                <button onclick="deletePaymentMethod(${method.payment_method_id})">Delete</button>
+            </td>
+        `);
+
+        // Form submission handlers
+        document.getElementById('budget-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                category_id: document.getElementById('budget-category').value,
+                amount: document.getElementById('budget-amount').value,
+                start_date: document.getElementById('budget-start-date').value,
+                end_date: document.getElementById('budget-end-date').value,
+            };
+            const budgetId = document.getElementById('budget-id').value;
+            try {
+                if (budgetId) {
+                    await axios.put(`/api/budgets/${budgetId}`, formData);
+                } else {
+                    await axios.post('/api/budgets', formData);
+                }
+                fetchData('budgets', 'budgets-table', budgetRowTemplate);
+                e.target.reset();
+            } catch (error) {
+                console.error('Error saving budget:', error);
+            }
+        });
+
+        // Similar form submission handlers for categories, expenses, and payment methods
+        // ... (implement these following the pattern above)
+
+        // Edit and delete functions
+        async function editBudget(id) {
+            try {
+                const response = await axios.get(`/api/budgets/${id}`);
+                const budget = response.data;
+                document.getElementById('budget-id').value = budget.budget_id;
+                document.getElementById('budget-category').value = budget.category_id;
+                document.getElementById('budget-amount').value = budget.amount;
+                document.getElementById('budget-start-date').value = budget.start_date.split('T')[0];
+                document.getElementById('budget-end-date').value = budget.end_date.split('T')[0];
+            } catch (error) {
+                console.error('Error fetching budget for edit:', error);
+            }
+        }
+
+        async function deleteBudget(id) {
+            if (confirm('Are you sure you want to delete this budget?')) {
+                try {
+                    await axios.delete(`/api/budgets/${id}`);
+                    fetchData('budgets', 'budgets-table', budgetRowTemplate);
+                } catch (error) {
+                    console.error('Error deleting budget:', error);
+                }
+            }
+        }
+
+        // Similar edit and delete functions for categories, expenses, and payment methods
+        // ... (implement these following the pattern above)
+
+        // Expense Analytics Chart
+        async function createExpenseChart() {
+            try {
+                const response = await axios.get('/api/expenses');
+                const expenses = response.data;
+                const categoryTotals = expenses.reduce((acc, expense) => {
+                    acc[expense.category_name] = (acc[expense.category_name] || 0) + parseFloat(expense.amount);
+                    return acc;
+                }, {});
+
+                const ctx = document.getElementById('expense-chart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(categoryTotals),
+                        datasets: [{
+                            data: Object.values(categoryTotals),
+                            backgroundColor: [
+                                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Expenses by Category'
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating expense chart:', error);
+            }
+        }
+
+        createExpenseChart();
+
+        // Delete user account
+        document.getElementById('delete-account').addEventListener('click', async () => {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                try {
+                    await axios.delete('/api/users/current'); // Assuming there's an endpoint for the current user
+                    alert('Your account has been deleted. You will be logged out.');
+                    window.location.href = '/logout'; // Redirect to logout page or home
+                } catch (error) {
+                    console.error('Error deleting account:', error);
+                    alert('An error occurred while deleting your account. Please try again.');
+                }
+            }
+        });
+
+        // Initial data fetch
+        fetchData('budgets', 'budgets-table', budgetRowTemplate);
+        fetchData('categories', 'categories-table', categoryRowTemplate);
+        fetchData('expenses', 'expenses-table', expenseRowTemplate);
+        fetchData('payment-methods', 'payment-methods-table', paymentMethodRowTemplate);
+    </script>
+</body>
+</html>

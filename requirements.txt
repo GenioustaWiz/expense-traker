@@ -1,0 +1,14 @@
+npm init -y
+
+npm install express express-validator mysql2 dotenv bcryptjs helmet nodemon express-rate-limit cookie-parser ejs jsonwebtoken express-session
+
+npm install sequelize 
+#Install the CLI Globally
+npm install -g sequelize-cli
+
+# FOR testing database
+# node test-db.jsnp
+
+# not neccesary
+# to be use by generatemigrations file
+npm install sqlite3

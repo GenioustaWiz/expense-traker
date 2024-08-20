@@ -1,0 +1,33 @@
+{
+  "name": "week-6-integration-of-frontend-and-backend-genioustawiz",
+  "version": "1.0.0",
+  "description": "In this week, you will integrate the frontend and backend components of the Expense Tracker Application using Node.js for the backend and HTML, CSS, and JavaScript for the frontend. You will implement user authentication on the backend and create API endpoints to retrieve and display data on the frontend. This will provide hands-on experience with full-stack development, integrating frontend with backend APIs, and managing user sessions securely.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0",
+    "nodemon": "^3.1.4",
+    "sequelize": "^6.37.3",
+    "umzug": "^3.8.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
+  }
+}

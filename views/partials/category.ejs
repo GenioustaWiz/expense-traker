@@ -1,0 +1,35 @@
+
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 8px; text-align: left; }
+        .form-group { margin-bottom: 1em; }
+    </style>
+    <h1>Manage Categories</h1>
+    
+    <!-- Form to add a new category -->
+    <h2 id="formTitle">Add New Category</h2>
+    <form id="categoryForm" action="/categories/save" method="POST">
+        <input type="hidden" id="category_id" name="category_id">
+        <div class="form-group">
+            <label for="category_name">Category Name:</label>
+            <input type="text" id="category_name" name="category_name" required>
+        </div>
+        <button type="submit" id="submitButton">Add Category</button>
+    </form>
+    
+    <h2>Existing Categories</h2>
+    <table id="categoriesTable">
+        <thead>
+            <tr>
+                <th>Category ID</th>
+                <th>User ID</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+    

@@ -1,0 +1,42 @@
+<!-- Form to add or edit an budget -->
+<h2 id="budget-formTitle">Add New Budget</h2>
+<form id="expenseForm" action="/budgets/save" method="POST">
+    <input type="hidden" id="budget_id" name="budget_id">
+    
+    <div class="form-group">
+        <label for="Bu_category_id">Select Category:</label>
+        <select id="Bu_category_id" name="Bu_category_id" required></select>
+    </div>
+    <div class="form-group">
+        <label for="Bu_amount">Amount:</label>
+        <input type="number" id="Bu_amount" name="Bu_amount" required>
+    </div>
+    <div class="form-group">
+        <label for="St_date">Start Date:</label>
+        <input type="date" id="St_date" name="St_date" required>
+    </div>
+    <div class="form-group">
+        <label for="End_date">End Date:</label>
+        <input type="date" id="End_date" name="End_date" required>
+    </div>
+    <button type="submit" id="bu-submitButton">Add Budget</button>
+</form>
+
+<h2>Existing Budgets</h2>
+    <table id="budgetsTable">
+        <thead>
+            <tr>
+                <th>Budget ID</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+<script src="/js/budget.js" defer></script>

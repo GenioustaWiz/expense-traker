@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head') %>
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <h1>Welcome, <%= username %>!</h1>
+    <p>This is the protected index page.</p>
+    <a href="/api/user/logout">Logout</a>
+    <a href="/api/user/delete">delete</a>
+
+    <%- include('partials/paymethod.ejs') %>
+    <%- include('partials/budget.ejs') %>
+    <%- include('partials/expense.ejs') %>
+    <%- include('partials/category.ejs') %>
+
+    <script src="/js/category.js"></script>
+</body>
+</html>

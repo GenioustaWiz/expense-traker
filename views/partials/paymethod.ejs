@@ -1,0 +1,27 @@
+<!-- Form to add or edit an payment_method -->
+<h2 id="payment_method-formTitle">Add New Payment method</h2>
+<form id="payment_methodForm" action="/payMethods/save" method="POST">
+    <input type="hidden" id="payment_method_id" name="payment_method_id">
+    
+    <div class="form-group">
+        <label for="payment_method_name">Payment Method:</label>
+        <input type="text" id="payment_method_name" name="payment_method_name" required>
+    </div>
+    <button type="submit" id="pm-submitButton">Add Payment method</button>
+</form>
+
+<h2>Existing Payment methods</h2>
+    <table id="payment_methodsTable">
+        <thead>
+            <tr>
+                <th>Method ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+<script src="/js/paymentMethod.js" defer></script>
