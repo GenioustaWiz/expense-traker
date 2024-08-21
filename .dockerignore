@@ -5,7 +5,9 @@
 /node_modules
 /deploying_to_glitch.txt
 .vercel
-/structure.txt
+/migrations--
 /migrations_commands.txt
 /requirements.txt
 /commands-4-Docker.txt
+
+/config/setupDatabase.js

@@ -8,3 +8,4 @@
 /structure.txt
 /migrations_commands.txt
 /requirements.txt
+/config/setupDatabase.js
