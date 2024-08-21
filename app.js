@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const session = require('express-session');
-require('dotenv').config();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -16,7 +15,6 @@ const payMethodRoutes = require('./routes/paymentMethod');
 const authMiddleware = require('./middleware/authMiddleware');
 const errorMiddleware = require('./middleware/errorMiddleware');
 
-const { sequelize, initializeDatabase } = require('./models');
 
 const app = express();
 // Middleware to parse JSON bodies

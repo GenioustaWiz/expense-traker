@@ -1,0 +1,5 @@
+Before pushing your project to GitHub, test it locally by running the following commands:
+
+docker build -t expense-traker .
+
+docker run -p 5000:5000 expense-traker
