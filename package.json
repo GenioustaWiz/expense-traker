@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "In this week, you will integrate the frontend and backend components of the Expense Tracker Application using Node.js for the backend and HTML, CSS, and JavaScript for the frontend. You will implement user authentication on the backend and create API endpoints to retrieve and display data on the frontend. This will provide hands-on experience with full-stack development, integrating frontend with backend APIs, and managing user sessions securely.",
   "main": "app.js",
-  "engines": {
-    "node": "v20.x"
-  },
+  
   "scripts": {
     "build": "npm install mysql2",
     "test": "echo \"Error: no test specified\" && exit 1",
